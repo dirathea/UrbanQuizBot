@@ -1,11 +1,13 @@
 'use strict';
 const Promise = require("bluebird");
 const Scrapper = require('./scrapper.js');
+const TIMEOUT_IN_SECOND = 30;
 
 class Handler {
   constructor(bot) {
     this.bot = bot;
     this.listener = [];
+    this.timeout = [];
   }
 
   _sendMessage(chatId, content, options) {
@@ -14,19 +16,26 @@ class Handler {
 
   startGameProcessor(message) {
     let scrapper = new Scrapper();
-    Promise.bind(this).then(function () {
+    Promise.bind(this).then(function() {
+      if (this.listener[message.chat.id]) {
+        return Promise.reject('Game Already Running');
+      }
       return scrapper.getWord();
-    }).then(function (result) {
+    }).then(function(result) {
       const quizStatement = "Guess the word by the following definition: \n\n"
-      this._sendMessage(message.chat.id, quizStatement + result.meaning);
-      this.listener[message.chat.id] = result.word;
-    }).catch(function (error) {
+      Promise.join(this._sendMessage(message.chat.id, quizStatement + result.meaning),
+        Promise.resolve(result),
+        function(sent, quiz) {
+          this.listener[message.chat.id] = quiz.word;
+          this.timeout[message.chat.id] = setTimeout(this._quizTimeout.bind(this, message.chat.id), TIMEOUT_IN_SECOND * 1000);
+        }.bind(this));
+    }).catch(function(error) {
       console.log(error);
     });
   }
 
   answerProcessor(message) {
-    if(this.listener[message.chat.id]) {
+    if (this.listener[message.chat.id]) {
       console.log('in listening state for', message.chat.id);
       if (this.listener[message.chat.id].toLowerCase() == message.text.toLowerCase().trim()) {
         const correctAnswer = "Great! The right answer is : ";
@@ -34,6 +43,11 @@ class Handler {
         this.listener[message.chat.id] = undefined;
       }
     }
+  }
+
+  _quizTimeout(chatId) {
+    this._sendMessage(chatId, 'Timeout! The right answer for previous question is : ' + this.listener[chatId]);
+    this.listener[chatId] = undefined;
   }
 }
 
