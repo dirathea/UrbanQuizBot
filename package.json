@@ -1,0 +1,19 @@
+{
+  "name": "urbanquizbot",
+  "version": "0.0.1",
+  "description": "A telegram bot about urban quiz word. User need to determine the word from urban dictionary top definitions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "telegram"
+  ],
+  "author": "dira.thea@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "node-telegram-bot-api": "^0.23.3",
+    "osmosis": "^1.1.0"
+  }
+}
