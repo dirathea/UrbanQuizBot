@@ -41,6 +41,7 @@ class Handler {
         const correctAnswer = "Great! The right answer is : ";
         this._sendMessage(message.chat.id, correctAnswer + this.listener[message.chat.id]);
         this.listener[message.chat.id] = undefined;
+        clearTimeout(this.timeout[message.chat.id]);
       }
     }
   }
