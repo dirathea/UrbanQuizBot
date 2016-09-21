@@ -4,6 +4,7 @@
   "description": "A telegram bot about urban quiz word. User need to determine the word from urban dictionary top definitions",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
