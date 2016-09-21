@@ -1,6 +1,9 @@
 'use strict';
 
 const TelegramBot = require('node-telegram-bot-api');
+const express = require('express');
+
+const webApp = express();
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
 
@@ -19,4 +22,10 @@ bot.onText(/\/startgame/, function responseStartMessage(message) {
 
 bot.on('message', function allMessage(message) {
   handler.answerProcessor(message);
+});
+
+
+// Heroku Handler for webapps
+webApp.listen(process.env.PORT, function () {
+    console.log('service is started');
 });
