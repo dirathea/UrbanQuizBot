@@ -20,8 +20,12 @@ bot.onText(/\/startgame/, function responseStartMessage(message) {
     handler.startGameProcessor(message);
 });
 
+bot.onText(/\/getnewclue/, function responseStartMessage(message) {
+    handler.getClueProcessor(message);
+});
+
 bot.on('message', function allMessage(message) {
-  handler.answerProcessor(message);
+    handler.answerProcessor(message);
 });
 
 
