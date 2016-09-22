@@ -2,10 +2,13 @@
 const Promise = require("bluebird");
 const Scrapper = require('./scrapper');
 const ChatBottleHandler = require('./ChatBottleHandler');
+const Botan = require('botanio');
 
 const TIMEOUT_IN_SECOND = 30;
 const TIMEOUT_DURATION = TIMEOUT_IN_SECOND * 1000;
 const quizStatement = "Guess the word by the following definition: \n\n";
+
+const botan = Botan(process.env.BOTAN_TOKEN);
 const chatBottleHandler = new ChatBottleHandler();
 
 class Handler {
@@ -21,6 +24,7 @@ class Handler {
 
     startGameProcessor(message) {
         chatBottleHandler.incomingMessageProcessor(message);
+        botan.track(message, 'start');
         if (!this.listener[message.chat.id]) {
             let scrapper = new Scrapper();
             return Promise.resolve().then(() => {
@@ -69,6 +73,7 @@ class Handler {
 
     getClueProcessor(message) {
         chatBottleHandler.incomingMessageProcessor(message);
+        botan.track(message, 'newclue');
         if (this.listener[message.chat.id] && this.listener[message.chat.id].index < this.listener[message.chat.id].clues.length) {
             clearTimeout(this.timeout[message.chat.id].id);
 
