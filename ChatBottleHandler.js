@@ -2,8 +2,9 @@
 
 const unirest = require('unirest');
 const CHATBOTTLE_BOT_ID = process.env.CHATBOTTLE_BOT_ID;
-const CHATBOTTLE_ENDPOINT = `https://api.chatbottle.co/v1/updates/${CHATBOTTLE_BOT_ID}/`;
 const CHATBOTTLE_TOKEN = process.env.CHATBOTTLE_TOKEN;
+const CHATBOTTLE_ENDPOINT = `https://api.chatbottle.co/v2/updates/${CHATBOTTLE_TOKEN}/`;
+
 
 class ChatBottleHandler {
     constructor() {
@@ -40,9 +41,6 @@ class ChatBottleHandler {
             ]
         };
         unirest.post(CHATBOTTLE_ENDPOINT)
-            .query({
-                token: CHATBOTTLE_TOKEN
-            })
             .headers({
                 'Content-Type': 'application/json'
             })
