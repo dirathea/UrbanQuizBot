@@ -32,6 +32,8 @@ class FacebookHandler {
                     case 'new clue' :
                         gameHandler.requestNewClue(sender).then((quiz) => {
                             this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
+                        }).catch((err) => {
+                            console.log('NEW_CLUE_LOG', err);
                         });
                         break;
                 }

@@ -53,6 +53,11 @@ class GameHandler {
                     code: 1,
                     message: `No game running for ${playerId}`,
                 });
+            } else if (this.listener[playerId].index >= this.listener[playerId].clues.length) {
+                reject({
+                    code: 2,
+                    message: `Run out of clues for ${playerId}`,
+                });
             } else {
                 clearTimeout(this.timeout[playerId].id);
                 const timeRemaining = TIMEOUT_DURATION - (Date.now() - this.timeout[playerId].time);
@@ -60,7 +65,7 @@ class GameHandler {
                 this.listener[playerId].index += 1;
                 this.timeout[playerId].id = setTimeout(this.timeout[playerId].action, timeRemaining);
                 resolve({
-                    index: quiz.index,
+                    index: quiz.index + 1,
                     total: quiz.clues.length,
                     word: quiz.clues[0].word,
                     clue: quiz.clues[quiz.index].meaning,
