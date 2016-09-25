@@ -3,23 +3,50 @@
  */
 'use strict';
 
-const facebookBot = require('messenger-bot');
+const unirest = require('unirest');
 
-const bot = new facebookBot({
-    token: process.env.FACEBOOK_BOT_TOKEN,
-    verify: process.env.FACEBOOK_VERIFY_TOKEN,
-});
+class FacebookHandler {
+    constructor(_config) {
+        this.config = _config;
+    }
 
-bot.on('error', (err) => {
-    console.log(err);
-});
+    handleMessage(req, res) {
+        let messaging_events = req.body.entry[0].messaging;
+        for (let i = 0; i < messaging_events.length; i++) {
+            let event = req.body.entry[0].messaging[i];
+            let sender = event.sender.id;
+            if (event.message && event.message.text) {
+                let text = event.message.text;
+                this.sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+            }
+        }
+        res.sendStatus(200)
+    }
 
-bot.on('message', (payload, reply) => {
+    sendTextMessage(sender, text) {
+        let messageData = {text: text}
+        unirest.post('https://graph.facebook.com/v2.6/me/messages')
+            .query({
+                access_token: this.config.token
+            })
+            .headers({
+                'Content-type': 'application/json',
+            })
+            .send({
+                recipient: {id: sender},
+                message: messageData,
+            })
+            .end((response) => {
+                console.log('sent', response);
+            });
+    }
 
-    let text = payload.message.text;
-    reply({text}, (err) => {
-        console.log('replying is error', err);
-    });
-});
-
-module.exports = bot;
+    verify(req, res) {
+        if (req.query['hub.verify_token'] === this.config.verify) {
+            res.send(req.query['hub.challenge']);
+        } else {
+            res.send('Error, wrong validation token');
+        }
+    }
+}
+module.exports = FacebookHandler;
