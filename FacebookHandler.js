@@ -8,7 +8,6 @@ const facebookBot = require('messenger-bot');
 const bot = new facebookBot({
     token: process.env.FACEBOOK_BOT_TOKEN,
     verify: process.env.FACEBOOK_VERIFY_TOKEN,
-    app_secret: process.env.FACEBOOK_APP_SECRET,
 });
 
 bot.on('error', (err) => {
