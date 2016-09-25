@@ -21,11 +21,20 @@ class FacebookHandler {
             const sender = event.sender.id;
             if (event.message && event.message.text) {
                 const text = event.message.text;
-                gameHandler.startGame(sender, () => {
-                    this.sendTextMessage(sender, 'Timeout!');
-                }).then((quiz) => {
-                    this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
-                });
+                switch (text.toLowerCase()) {
+                    case 'start game' :
+                        gameHandler.startGame(sender, () => {
+                            this.sendTextMessage(sender, 'Timeout!');
+                        }).then((quiz) => {
+                            this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
+                        });
+                        break;
+                    case 'new clue' :
+                        gameHandler.requestNewClue(sender).then((quiz) => {
+                            this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
+                        });
+                        break;
+                }
             }
         }
         res.sendStatus(200)

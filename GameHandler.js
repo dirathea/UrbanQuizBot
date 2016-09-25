@@ -8,7 +8,6 @@ const Scrapper = require('./scrapper');
 
 const TIMEOUT_IN_SECOND = 30;
 const TIMEOUT_DURATION = TIMEOUT_IN_SECOND * 1000;
-const quizStatement = "Guess the word by the following definition: \n\n";
 
 class GameHandler {
     constructor() {
@@ -28,10 +27,14 @@ class GameHandler {
                 const scrapper = new Scrapper();
                 scrapper.getWord().then((result) => {
                     this.listener[playerId] = {
-                        index: 1,
+                        index: 0,
                         clues: result
                     };
-                    this.timeout[playerId] = setTimeout(timeoutAction, TIMEOUT_DURATION);
+                    this.timeout[playerId] = {
+                        time: Date.now(),
+                        id: setTimeout(timeoutAction, TIMEOUT_DURATION),
+                        action: timeoutAction,
+                    };
                     resolve({
                         index: 1,
                         total: result.length,
@@ -42,6 +45,29 @@ class GameHandler {
             }
         });
     };
+
+    requestNewClue(playerId) {
+        return new Promise((resolve, reject) => {
+            if (!this.listener[playerId]) {
+                reject({
+                    code: 1,
+                    message: `No game running for ${playerId}`,
+                });
+            } else {
+                clearTimeout(this.timeout[playerId].id);
+                const timeRemaining = TIMEOUT_DURATION - (Date.now() - this.timeout[message.chat.id].time);
+                const quiz = this.listener[playerId];
+                this.listener[playerId].index += 1;
+                this.timeout[playerId].id = setTimeout(this.timeout[playerId].action, timeRemaining);
+                resolve({
+                    index: quiz.index,
+                    total: quiz.length,
+                    word: quiz[0].word,
+                    clue: quiz[quiz.index]
+                });
+            }
+        });
+    }
 }
 
 module.exports = GameHandler;
