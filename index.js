@@ -28,6 +28,13 @@ bot.on('message', function allMessage(message) {
     handler.answerProcessor(message);
 });
 
+webApp.get('/webhook', (req, res) => {
+    if (req.query['hub.verify_token'] === 'URBAN_QUIZ_VERIFY') {
+        res.send(req.query['hub.challenge']);
+    } else {
+        res.send('Error, wrong validation token');
+    }
+});
 
 // Heroku Handler for webapps
 webApp.listen(process.env.PORT, function () {
