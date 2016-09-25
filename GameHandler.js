@@ -53,7 +53,7 @@ class GameHandler {
                     code: 1,
                     message: `No game running for ${playerId}`,
                 });
-            } else if (!(this.listener[playerId].index < this.listener[playerId].clues.length)) {
+            } else if (this.listener[playerId].index >= this.listener[playerId].clues.length) {
                 reject({
                     code: 2,
                     message: `Run out of clues for ${playerId}`,
