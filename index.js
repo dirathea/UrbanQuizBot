@@ -15,6 +15,7 @@ const bot = new TelegramBot(token, {
 });
 
 const Handler = require('./handler.js');
+const facebookBot = require('./FacebookHandler');
 
 let handler = new Handler(bot);
 
@@ -30,18 +31,7 @@ bot.on('message', function allMessage(message) {
     handler.answerProcessor(message);
 });
 
-webApp.get('/webhook', (req, res) => {
-    console.log(req.body);
-    // Verify webhook
-    if (req.query['hub.verify_token'] === 'URBAN_QUIZ_VERIFY') {
-        res.send(req.query['hub.challenge']);
-    } else {
-        res.send('Error, wrong validation token');
-    }
-
-    //  Something else
-    console.log(req.body);
-});
+webApp.use('/webhook', facebookBot.middleware());
 
 //EAACirKiZCWvwBAE1IpBwmCgLGMH5m8f3NJ2GpkzTD0q1xB4egb5zuii5N9CQDfnINF4Igwe4rtkOESq0VGRVhIaZBIFCsKuQuTSk3kneDZC6cJkHZARwNlAhlTtsT5QG4Vs7lVdnvFY7CSAwXHDntGQ6MXfAmXuis3wn4S5sSAZDZD
 
