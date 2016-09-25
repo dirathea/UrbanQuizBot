@@ -4,6 +4,8 @@
 'use strict';
 
 const unirest = require('unirest');
+const GameHandler = require('./GameHandler');
+const gameHandler = new GameHandler();
 
 class FacebookHandler {
     constructor(_config) {
@@ -13,11 +15,13 @@ class FacebookHandler {
     handleMessage(req, res) {
         let messaging_events = req.body.entry[0].messaging;
         for (let i = 0; i < messaging_events.length; i++) {
-            let event = req.body.entry[0].messaging[i];
-            let sender = event.sender.id;
+            const event = req.body.entry[0].messaging[i];
+            const sender = event.sender.id;
             if (event.message && event.message.text) {
-                let text = event.message.text;
-                this.sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+                const text = event.message.text;
+                gameHandler.startGame(sender).then((quiz) => {
+                    this.sendTextMessage(sender, quiz.clue);
+                });
             }
         }
         res.sendStatus(200)
@@ -37,7 +41,6 @@ class FacebookHandler {
                 message: messageData,
             })
             .end((response) => {
-                console.log('sent', response);
             });
     }
 
