@@ -19,7 +19,9 @@ class FacebookHandler {
             const sender = event.sender.id;
             if (event.message && event.message.text) {
                 const text = event.message.text;
-                gameHandler.startGame(sender).then((quiz) => {
+                gameHandler.startGame(sender, () => {
+                    this.sendTextMessage(sender, 'Timeout!');
+                }).then((quiz) => {
                     this.sendTextMessage(sender, quiz.clue);
                 });
             }
