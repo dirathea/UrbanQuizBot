@@ -17,20 +17,9 @@ bot.on('error', (err) => {
 bot.on('message', (payload, reply) => {
 
     let text = payload.message.text;
-
-    bot.getProfile(payload.sender.id, (err, profile) => {
-        if (err) {
-            console.log('GET_PROFILE_ERROR', err);
-        }
-
-        reply({text}, (err) => {
-            if (err) {
-                console.log('REPLY_ERROR', err);
-            }
-
-            console.log(`Echoed back to ${profile.first_name} ${profile.last_name}: ${text}`)
-        })
-    })
+    reply({text}, (err) => {
+        console.log('replying is error', err);
+    });
 });
 
 module.exports = bot;
