@@ -61,9 +61,9 @@ class GameHandler {
                 this.timeout[playerId].id = setTimeout(this.timeout[playerId].action, timeRemaining);
                 resolve({
                     index: quiz.index,
-                    total: quiz.length,
-                    word: quiz[0].word,
-                    clue: quiz[quiz.index]
+                    total: quiz.clues.length,
+                    word: quiz.clues[0].word,
+                    clue: quiz.clues[quiz.index].meaning,
                 });
             }
         });
