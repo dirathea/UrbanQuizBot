@@ -32,7 +32,7 @@ class GameHandler {
                     };
                     this.timeout[playerId] = {
                         time: Date.now(),
-                        id: setTimeout(timeoutAction, TIMEOUT_DURATION),
+                        id: setTimeout(this._timeoutAction(timeoutAction), TIMEOUT_DURATION),
                         action: timeoutAction,
                     };
                     resolve({
@@ -63,7 +63,7 @@ class GameHandler {
                 const timeRemaining = TIMEOUT_DURATION - (Date.now() - this.timeout[playerId].time);
                 const quiz = this.listener[playerId];
                 this.listener[playerId].index += 1;
-                this.timeout[playerId].id = setTimeout(this.timeout[playerId].action, timeRemaining);
+                this.timeout[playerId].id = setTimeout(this._timeoutAction(this.timeout[playerId].action), timeRemaining);
                 resolve({
                     index: quiz.index + 1,
                     total: quiz.clues.length,
@@ -72,6 +72,12 @@ class GameHandler {
                 });
             }
         });
+    }
+
+    _timeoutAction(playerId, actions) {
+        this.listener[playerId] = undefined;
+        this.timeout[playerId] = undefined;
+        actions();
     }
 }
 
