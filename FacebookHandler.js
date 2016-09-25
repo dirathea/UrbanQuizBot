@@ -7,6 +7,8 @@ const unirest = require('unirest');
 const GameHandler = require('./GameHandler');
 const gameHandler = new GameHandler();
 
+const quizStatement = "Guess the word by the following definition: \n\n";
+
 class FacebookHandler {
     constructor(_config) {
         this.config = _config;
@@ -22,7 +24,7 @@ class FacebookHandler {
                 gameHandler.startGame(sender, () => {
                     this.sendTextMessage(sender, 'Timeout!');
                 }).then((quiz) => {
-                    this.sendTextMessage(sender, quiz.clue);
+                    this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
                 });
             }
         }

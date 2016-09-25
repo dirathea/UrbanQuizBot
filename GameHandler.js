@@ -31,8 +31,10 @@ class GameHandler {
                         index: 1,
                         clues: result
                     };
-                    this.timeout[playerId] = timeoutAction;
+                    this.timeout[playerId] = setTimeout(timeoutAction, TIMEOUT_DURATION);
                     resolve({
+                        index: 1,
+                        total: result.length,
                         word: result[0].word,
                         clue: result[0].meaning,
                     });
