@@ -55,7 +55,7 @@ class GameHandler {
                 });
             } else {
                 clearTimeout(this.timeout[playerId].id);
-                const timeRemaining = TIMEOUT_DURATION - (Date.now() - this.timeout[message.chat.id].time);
+                const timeRemaining = TIMEOUT_DURATION - (Date.now() - this.timeout[playerId].time);
                 const quiz = this.listener[playerId];
                 this.listener[playerId].index += 1;
                 this.timeout[playerId].id = setTimeout(this.timeout[playerId].action, timeRemaining);
