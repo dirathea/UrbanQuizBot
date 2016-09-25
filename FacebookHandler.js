@@ -36,6 +36,13 @@ class FacebookHandler {
                             console.log('NEW_CLUE_LOG', err);
                         });
                         break;
+                    default:
+                        gameHandler.anaswerQuiz(sender, text).then((answer) => {
+                            this.sendTextMessage(sender, `Great! The right answer is : ${answer}`);
+                        }).catch((err) => {
+
+                        });
+                        break;
                 }
             }
         }

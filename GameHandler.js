@@ -53,7 +53,7 @@ class GameHandler {
                     code: 1,
                     message: `No game running for ${playerId}`,
                 });
-            } else if (this.listener[playerId].index >= this.listener[playerId].clues.length) {
+            } else if (this.listener[playerId].index >= this.listener[playerId].clues.length - 1) {
                 reject({
                     code: 2,
                     message: `Run out of clues for ${playerId}`,
@@ -70,6 +70,29 @@ class GameHandler {
                     word: quiz.clues[0].word,
                     clue: quiz.clues[quiz.index].meaning,
                 });
+            }
+        });
+    }
+
+    anaswerQuiz(playerId, answer) {
+        return new Promise((resolve, reject) => {
+            if (!this.listener[playerId]) {
+                reject({
+                    code: 1,
+                    message: `No game running for ${playerId}`,
+                });
+            } else {
+                if (this.listener[playerId].clues[0].word.toLowerCase() == answer.toLowerCase()) {
+                    clearTimeout(this.timeout[playerId].id);
+                    this.listener[playerId] = undefined;
+                    this.timeout[playerId] = undefined;
+                    resolve(answer);
+                } else {
+                    reject({
+                        code: 2,
+                        message: `Invalid answer`,
+                    });
+                }
             }
         });
     }
