@@ -24,7 +24,7 @@ class FacebookHandler {
                 switch (text.toLowerCase()) {
                     case 'start game' :
                         gameHandler.startGame(sender, () => {
-                            this.sendTextMessage(sender, 'Timeout!');
+                            this.sendTextMessage(sender, `Sorry, you're running out of time. Just type start game to begin..`);
                         }).then((quiz) => {
                             this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
                         });
