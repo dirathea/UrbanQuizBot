@@ -4,15 +4,18 @@
 'use strict';
 
 const unirest = require('unirest');
+const EventEmitter = require('events');
 const GameHandler = require('./GameHandler');
 const gameHandler = new GameHandler();
 
 const quizStatement = "Guess the word by the following definition: \n\n";
 const BASE_FACEBOOK_ENDPOINT = "https://graph.facebook.com/v2.6/me";
 
-class FacebookHandler {
+class FacebookHandler extends EventEmitter {
     constructor(_config) {
+        super();
         this.config = _config;
+
     }
 
     handleMessage(req, res) {
@@ -24,49 +27,24 @@ class FacebookHandler {
                 const text = event.message.text;
                 switch (text.toLowerCase()) {
                     case 'start game' :
-                        gameHandler.startGame(sender, (rightAnswer) => {
-                            this.sendTextMessage(sender, `Sorry, you're running out of time. The right answer is ${rightAnswer}.`);
-                        }).then((quiz) => {
-                            this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
-                        });
+                        this.emit('startgame', sender);
                         break;
-                    case 'new clue' :
-                        gameHandler.requestNewClue(sender).then((quiz) => {
-                            this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
-                        }).catch((err) => {
-                            console.log('NEW_CLUE_LOG', err);
-                        });
+                    case 'get new clue' :
+                        this.emit('getnewclue', sender);
                         break;
                     default:
-                        gameHandler.anaswerQuiz(sender, text).then((answer) => {
-                            this.sendTextMessage(sender, `Great! The right answer is : ${answer}`);
-                        }).catch((err) => {
-
-                        });
+                        this.emit('answer', sender, text);
                         break;
                 }
             } else if (event.postback) {
                 //    Handle all postback actions
-                switch (event.postback.payload) {
-                    case 'startgame' :
-                        gameHandler.startGame(sender, (rightAnswer) => {
-                            this.sendTextMessage(sender, `Sorry, you're running out of time. The right answer is ${rightAnswer}.`);
-                        }).then((quiz) => {
-                            this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
-                        });
-                        break;
-                    case 'getnewclue':
-                        gameHandler.requestNewClue(sender).then((quiz) => {
-                            this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
-                        }).catch((err) => {
-                            console.log('NEW_CLUE_LOG', err);
-                        });
-                        break;
-                }
+                const payload = event.postback.payload;
+                this.emit(payload, sender);
             }
         }
         res.sendStatus(200)
     }
+
 
     sendTextMessage(sender, text) {
         let messageData = {text: text};
@@ -88,6 +66,33 @@ class FacebookHandler {
     initializeThreadSettings() {
         this.setGreetingText(`Hi {{user_full_name}}! Let's play Urban Quiz!`);
         this.setMenuButton();
+        this.setEventHandler();
+    }
+
+    setEventHandler() {
+        this.on('startgame', (sender) => {
+            gameHandler.startGame(sender, (rightAnswer) => {
+                this.sendTextMessage(sender, `Sorry, you're running out of time. The right answer is ${rightAnswer}.`);
+            }).then((quiz) => {
+                this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
+            });
+        });
+
+        this.on('getnewclue', (sender) => {
+            gameHandler.requestNewClue(sender).then((quiz) => {
+                this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
+            }).catch((err) => {
+                console.log('NEW_CLUE_LOG', err);
+            });
+        });
+
+        this.on('answer', (sender, text) => {
+            gameHandler.answerQuiz(sender, text).then((answer) => {
+                this.sendTextMessage(sender, `Great! The right answer is : ${answer}`);
+            }).catch((err) => {
+
+            });
+        });
     }
 
     setGreetingText(message) {

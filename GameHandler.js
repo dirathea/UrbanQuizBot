@@ -74,7 +74,7 @@ class GameHandler {
         });
     }
 
-    anaswerQuiz(playerId, answer) {
+    answerQuiz(playerId, answer) {
         return new Promise((resolve, reject) => {
             if (!this.listener[playerId]) {
                 reject({
