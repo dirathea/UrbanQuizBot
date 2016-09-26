@@ -82,6 +82,7 @@ class FacebookHandler {
                 },
             })
             .end((response) => {
+                console.log('greeting text sent');
             });
     }
 
