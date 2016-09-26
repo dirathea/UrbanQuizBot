@@ -98,9 +98,10 @@ class GameHandler {
     }
 
     _timeoutAction(playerId, actions) {
+        const answer = this.listener[playerId].clues[0].word;
         this.listener[playerId] = undefined;
         this.timeout[playerId] = undefined;
-        actions();
+        actions(answer);
     }
 }
 
