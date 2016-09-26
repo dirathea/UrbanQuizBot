@@ -49,8 +49,8 @@ class FacebookHandler {
                 //    Handle all postback actions
                 switch (event.postback.payload) {
                     case 'startgame' :
-                        gameHandler.startGame(sender, () => {
-                            this.sendTextMessage(sender, `Sorry, you're running out of time. Just type start game to begin..`);
+                        gameHandler.startGame(sender, (rightAnswer) => {
+                            this.sendTextMessage(sender, `Sorry, you're running out of time. The right answer is ${rightAnswer}.`);
                         }).then((quiz) => {
                             this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
                         });
