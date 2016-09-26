@@ -16,6 +16,7 @@ class FacebookHandler {
     }
 
     handleMessage(req, res) {
+        console.log('body', req.body);
         let messaging_events = req.body.entry[0].messaging;
         for (let i = 0; i < messaging_events.length; i++) {
             const event = req.body.entry[0].messaging[i];
@@ -67,6 +68,11 @@ class FacebookHandler {
             });
     }
 
+    initializeThreadSettings() {
+        this.setGreetingText(`Hi {{user_full_name}}! Let's play Urban Quiz!`);
+        this.setMenuButton();
+    }
+
     setGreetingText(message) {
         unirest.post(`${BASE_FACEBOOK_ENDPOINT}/thread_settings`)
             .query({
@@ -83,6 +89,35 @@ class FacebookHandler {
             })
             .end((response) => {
                 console.log('greeting text sent');
+            });
+    }
+
+    setMenuButton() {
+        unirest.post(`${BASE_FACEBOOK_ENDPOINT}/thread_settings`)
+            .query({
+                access_token: this.config.token
+            })
+            .headers({
+                'Content-type': 'application/json',
+            })
+            .send({
+                setting_type: 'call_to_actions',
+                thread_state: 'existing_thread',
+                call_to_actions: [
+                    {
+                        type: 'postback',
+                        title: 'Start Game',
+                        payload: 'startgame',
+                    },
+                    {
+                        type: 'postback',
+                        title: 'Get New Clue',
+                        payload: 'getnewclue',
+                    },
+                ]
+            })
+            .end((response) => {
+                console.log('Persistent Menu set');
             });
     }
 

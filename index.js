@@ -50,5 +50,5 @@ webApp.post('/webhook', (req, res) => {
 // Heroku Handler for webapps
 webApp.listen(process.env.PORT, function () {
     console.log('service is started');
-    facebookHandler.setGreetingText(`Hi {{user_full_name}}! Let's play Urban Quiz!`);
+    facebookHandler.initializeThreadSettings();
 });
