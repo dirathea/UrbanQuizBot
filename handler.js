@@ -7,6 +7,7 @@ const Botan = require('botanio');
 const TIMEOUT_IN_SECOND = 30;
 const TIMEOUT_DURATION = TIMEOUT_IN_SECOND * 1000;
 const quizStatement = "Guess the word by the following definition: \n\n";
+const rateUrbanQuiz = "\nRate UrbanQuizBot on : https://telegram.me/storebot?start=urbanquizbot";
 
 const botan = Botan(process.env.BOTAN_TOKEN);
 const chatBottleHandler = new ChatBottleHandler();
@@ -60,7 +61,7 @@ class Handler {
             if (this.listener[message.chat.id].clues[0].word.toLowerCase() == message.text.toLowerCase().trim()) {
                 clearTimeout(this.timeout[message.chat.id].id);
 
-                const correctAnswer = `Great! The right answer is : ${this.listener[message.chat.id].clues[0].word}`;
+                const correctAnswer = `Great! The right answer is : ${this.listener[message.chat.id].clues[0].word}${rateUrbanQuiz}`;
 
                 this._sendMessage(message.chat.id, correctAnswer).then((msg) => {
                     chatBottleHandler.outgoingMessageProcessor(msg.message_id, correctAnswer, message.chat.id);
@@ -90,7 +91,7 @@ class Handler {
     }
 
     _quizTimeout(chatId) {
-        const timeoutMessage = `Timeout! The right answer for previous question is : ${this.listener[chatId].clues[0].word}`;
+        const timeoutMessage = `Timeout! The right answer for previous question is : ${this.listener[chatId].clues[0].word}${rateUrbanQuiz}`;
 
         this._sendMessage(chatId, timeoutMessage).then((msg) => {
             chatBottleHandler.outgoingMessageProcessor(msg.message_id, timeoutMessage, chatId);
