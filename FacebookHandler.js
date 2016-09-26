@@ -16,7 +16,6 @@ class FacebookHandler {
     }
 
     handleMessage(req, res) {
-        console.log('body', req.body);
         let messaging_events = req.body.entry[0].messaging;
         for (let i = 0; i < messaging_events.length; i++) {
             const event = req.body.entry[0].messaging[i];
@@ -43,6 +42,24 @@ class FacebookHandler {
                             this.sendTextMessage(sender, `Great! The right answer is : ${answer}`);
                         }).catch((err) => {
 
+                        });
+                        break;
+                }
+            } else if (event.postback) {
+                //    Handle all postback actions
+                switch (event.postback.payload) {
+                    case 'startgame' :
+                        gameHandler.startGame(sender, () => {
+                            this.sendTextMessage(sender, `Sorry, you're running out of time. Just type start game to begin..`);
+                        }).then((quiz) => {
+                            this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
+                        });
+                        break;
+                    case 'getnewclue':
+                        gameHandler.requestNewClue(sender).then((quiz) => {
+                            this.sendTextMessage(sender, `${quizStatement}(${quiz.index}/${quiz.total})\n${quiz.clue}`);
+                        }).catch((err) => {
+                            console.log('NEW_CLUE_LOG', err);
                         });
                         break;
                 }
