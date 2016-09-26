@@ -1,6 +1,7 @@
 'use strict';
 const Promise = require("bluebird");
 const url = require('url');
+const _ = require('lodash');
 
 const osmosis = require('osmosis');
 
@@ -23,11 +24,12 @@ class Scrapper {
                     'meaning': '.meaning'
                 })
                 .data(function (result) {
-                    quiz.push(result);
+                    if (!_.isEmpty(result)) {
+                        quiz.push(result);
+                    }
                 })
                 .done(function () {
                     console.log('total of clue', quiz.length);
-                    console.log(quiz);
                     resolve(quiz.slice(0, 3).map((clue) => {
                         clue.meaning = clue.meaning.replace(new RegExp(clue.word, 'g'), '_____');
                         return clue;
