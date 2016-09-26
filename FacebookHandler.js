@@ -8,6 +8,7 @@ const GameHandler = require('./GameHandler');
 const gameHandler = new GameHandler();
 
 const quizStatement = "Guess the word by the following definition: \n\n";
+const BASE_FACEBOOK_ENDPOINT = "https://graph.facebook.com/v2.6/me";
 
 class FacebookHandler {
     constructor(_config) {
@@ -50,8 +51,8 @@ class FacebookHandler {
     }
 
     sendTextMessage(sender, text) {
-        let messageData = {text: text}
-        unirest.post('https://graph.facebook.com/v2.6/me/messages')
+        let messageData = {text: text};
+        unirest.post(`${BASE_FACEBOOK_ENDPOINT}/messages`)
             .query({
                 access_token: this.config.token
             })
@@ -61,6 +62,24 @@ class FacebookHandler {
             .send({
                 recipient: {id: sender},
                 message: messageData,
+            })
+            .end((response) => {
+            });
+    }
+
+    setGreetingText(message) {
+        unirest.post(`${BASE_FACEBOOK_ENDPOINT}/thread_settings`)
+            .query({
+                access_token: this.config.token
+            })
+            .headers({
+                'Content-type': 'application/json',
+            })
+            .send({
+                setting_type: 'greeting',
+                greeting: {
+                    text: message
+                },
             })
             .end((response) => {
             });
