@@ -19,7 +19,7 @@
     "express": "^4.14.0",
     "lodash": "^4.16.2",
     "messenger-bot": "^2.3.0",
-    "node-telegram-bot-api": "^0.23.3",
+    "node-telegram-bot-api-latest": "^0.2.1",
     "osmosis": "^1.1.0",
     "unirest": "^0.5.1"
   }

@@ -14,7 +14,11 @@ webApp.use(bodyParser.urlencoded({
 const token = process.env.TELEGRAM_BOT_TOKEN;
 
 // Setup polling way
-const bot = new TelegramBot(token);
+const bot = new TelegramBot(token, {
+    request: {
+        timeout: 65000,
+    }
+});
 
 const Handler = require('./handler.js');
 const FacebookHandler = require('./FacebookHandler');
