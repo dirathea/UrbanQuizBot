@@ -69,7 +69,7 @@ class GameHandler {
                     index: quiz.index + 1,
                     total: quiz.clues.length,
                     word: quiz.clues[0].word,
-                    hidden: quiz[0].word.replace(new RegExp('[a-zA-Z0-9]', 'g'), '_').split('').join(' '),
+                    hidden: quiz.clues[0].word.replace(new RegExp('[a-zA-Z0-9]', 'g'), '_').split('').join(' '),
                     clue: quiz.clues[quiz.index].meaning,
                 });
             }
