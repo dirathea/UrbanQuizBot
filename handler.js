@@ -38,7 +38,7 @@ class Handler {
 
     answerProcessor(message) {
         if (!message.text.startsWith('/')) {
-            gameHandler.answerQuiz(message.chat.id, message.text().toLowerCase()).then((answer) => {
+            gameHandler.answerQuiz(message.chat.id, message.text.toLowerCase()).then((answer) => {
                 const correctAnswer = `Great! The right answer is : ${answer}${rateUrbanQuiz}`;
                 this._sendMessage(message.chat.id, correctAnswer).then((msg) => {
                     chatBottleHandler.outgoingMessageProcessor(msg.message_id, correctAnswer, message.chat.id);
