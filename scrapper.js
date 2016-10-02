@@ -24,7 +24,7 @@ class Scrapper {
                     'meaning': '.meaning'
                 })
                 .data(function (result) {
-                    if (!_.isEmpty(result)) {
+                    if (!_.isEmpty(result) && result.meaning.length < 320) {
                         quiz.push(result);
                     }
                 })

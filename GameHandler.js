@@ -39,6 +39,7 @@ class GameHandler {
                         index: 1,
                         total: result.length,
                         word: result[0].word,
+                        hidden: result[0].word.replace(/[^a-zA-Z0-9]/g, '_'),
                         clue: result[0].meaning,
                     });
                 });
@@ -68,6 +69,7 @@ class GameHandler {
                     index: quiz.index + 1,
                     total: quiz.clues.length,
                     word: quiz.clues[0].word,
+                    hidden: result[0].word.replace(/[^a-zA-Z0-9]/g, '_'),
                     clue: quiz.clues[quiz.index].meaning,
                 });
             }
