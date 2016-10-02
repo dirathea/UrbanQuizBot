@@ -60,6 +60,8 @@ class FacebookHandler extends EventEmitter {
                 message: messageData,
             })
             .end((response) => {
+                console.log('FACEBOOK_TEXT_MESSAGE', `Sent Status ${response.code}`);
+                console.log('FACEBOOK_TEXT_MESSAGE', `Sent Body ${response.body}`);
             });
     }
 
