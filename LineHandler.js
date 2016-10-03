@@ -115,7 +115,9 @@ class LineHandler extends EventEmitter {
                 const event = data.events[i];
                 switch (event.type) {
                     case LINE_MESSAGE_EVENT:
-                        this.emit(LINE_MESSAGE_EVENT, event.source, event.replyToken, event.message);
+                        if (event.message.type === 'text') {
+                            this.emit(LINE_MESSAGE_EVENT, event.source, event.replyToken, event.message);
+                        }
                         break;
                     default:
                         console.log('Unhandled LINE event', event.type);
