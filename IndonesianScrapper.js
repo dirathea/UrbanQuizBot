@@ -52,7 +52,7 @@ class IndonesianScrapper {
                         'meaning': '.definition'
                     })
                     .data(function (result) {
-                        if (!_.isEmpty(result) && result.meaning.length < 200) {
+                        if (!_.isEmpty(result) && !_.isEmpty(result.meaning) && result.meaning.length < 200) {
                             quiz.push(result);
                         }
                     })
