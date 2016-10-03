@@ -22,12 +22,15 @@ const bot = new TelegramBot(token, {
 
 const Handler = require('./handler.js');
 const FacebookHandler = require('./FacebookHandler');
+const LineHandler = require('./LineHandler');
 
 let handler = new Handler(bot);
 const facebookHandler = new FacebookHandler({
     token: process.env.FACEBOOK_BOT_TOKEN,
     verify: process.env.FACEBOOK_VERIFY_TOKEN,
 });
+
+const lineHandler = new LineHandler(process.env.LINE_CHANNEL_TOKEN);
 
 bot.onText(/\/startgame/, function responseStartMessage(message) {
     handler.startGameProcessor(message);
@@ -48,6 +51,11 @@ webApp.get('/webhook', (req, res) => {
 webApp.post('/webhook', (req, res) => {
     facebookHandler.handleMessage(req, res);
     res.end(JSON.stringify({status: 'ok'}));
+});
+
+webApp.post('/line', (req, res) => {
+    lineHandler.handleMessage(req.body);
+    res.sendStatus(200);
 });
 
 webApp.post(`/${token}`, (req, res) => {
