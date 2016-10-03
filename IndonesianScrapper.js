@@ -3,8 +3,10 @@
  */
 
 'use strict';
-
+const Promise = require("bluebird");
+const retry = require('bluebird-retry');
 const osmosis = require('osmosis');
+const _ = require('lodash');
 
 const KITAB_GAUL_RANDOM_ENDPOINT = 'https://kitabgaul.com/words/random';
 
