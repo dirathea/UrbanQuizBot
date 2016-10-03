@@ -27,8 +27,8 @@ class IndonesianScrapper {
         return new Promise(function (resolve, reject) {
             let quiz = [];
             osmosis.get(KITAB_GAUL_RANDOM_ENDPOINT)
-                .find('.word a')
-                .follow('@href')
+                .find('.entryDetail')
+                .click('.word a')
                 .find('.entryDetail')
                 .set({
                     'word': '.word a',
