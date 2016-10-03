@@ -6,9 +6,9 @@ const _ = require('lodash');
 
 const osmosis = require('osmosis');
 
-let URBAN_DICTIONARY_BASE_URL = 'http://www.urbandictionary.com/';
-let URBAN_DICTIONARY_RANDOM_URL = [URBAN_DICTIONARY_BASE_URL, 'random.php'].join('/');
-let URBAN_DICTIONARY_DEFINITIONS = url.resolve(URBAN_DICTIONARY_BASE_URL, 'define.php');
+const URBAN_DICTIONARY_BASE_URL = 'http://www.urbandictionary.com/';
+const URBAN_DICTIONARY_RANDOM_URL = [URBAN_DICTIONARY_BASE_URL, 'random.php'].join('/');
+const URBAN_DICTIONARY_DEFINITIONS = url.resolve(URBAN_DICTIONARY_BASE_URL, 'define.php');
 
 class Scrapper {
     constructor() {

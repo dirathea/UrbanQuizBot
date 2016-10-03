@@ -5,6 +5,10 @@
 
 const Promise = require("bluebird");
 const Scrapper = require('./scrapper');
+const IndonesianScrapper = require('./IndonesianScrapper');
+
+const scrapper = new Scrapper();
+const inaScrapper = new IndonesianScrapper();
 
 const TIMEOUT_IN_SECOND = 30;
 const TIMEOUT_DURATION = TIMEOUT_IN_SECOND * 1000;
@@ -24,8 +28,7 @@ class GameHandler {
                     message: `Game for ${playerId} is already running`,
                 });
             } else {
-                const scrapper = new Scrapper();
-                scrapper.getWord().then((result) => {
+                inaScrapper.getWord().then((result) => {
                     this.listener[playerId] = {
                         index: 0,
                         clues: result
