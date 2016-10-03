@@ -28,7 +28,7 @@ class GameHandler {
                     message: `Game for ${playerId} is already running`,
                 });
             } else {
-                inaScrapper.getWord().then((result) => {
+                scrapper.getWord().then((result) => {
                     this.listener[playerId] = {
                         index: 0,
                         clues: result
