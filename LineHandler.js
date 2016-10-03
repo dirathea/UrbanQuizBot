@@ -12,6 +12,7 @@ const gameHandler = new GameHandler();
 
 const LINE_MESSAGE_EVENT = 'message';
 const LINE_REPLY_ENDPOINT = 'https://api.line.me/v2/bot/message/reply';
+const LINE_PUSH_ENDPOINT = 'https://api.line.me/v2/bot/message/push';
 
 const LINE_START_GAME_COMMAND = 'start game';
 const LINE_GET_NEW_CLUE_COMMAND = 'get new clue';
@@ -60,7 +61,7 @@ class LineHandler extends EventEmitter {
     }
 
     sendPushMessage(to, text) {
-        unirest.post(LINE_REPLY_ENDPOINT)
+        unirest.post(LINE_PUSH_ENDPOINT)
             .headers({
                 'Content-type': 'application/json',
                 'Authorization': `Bearer ${this.token}`
