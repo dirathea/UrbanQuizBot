@@ -18,7 +18,7 @@ class IndonesianScrapper {
 
     getWord() {
         return new Promise((resolve, reject) => {
-            retry(this._getWord).done((result) => {
+            retry(this._getWord.bind(this)).done((result) => {
                 return resolve(result);
             });
         });
