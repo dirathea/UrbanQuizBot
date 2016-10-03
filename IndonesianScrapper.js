@@ -45,7 +45,7 @@ class IndonesianScrapper {
         return new Promise((resolve, reject) => {
             let quiz = [];
             this._getRandomWord().then((slug) => {
-                osmosis.get(`${KITAB_GAUL_BASIC_ENDPOINT}/${slug}`)
+                osmosis.get(`${KITAB_GAUL_BASIC_ENDPOINT}${slug}`)
                     .find('.entryDetail')
                     .set({
                         'word': '.word a',
