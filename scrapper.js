@@ -17,7 +17,7 @@ class Scrapper {
 
     getWord() {
         return new Promise((resolve, reject) => {
-            retry(this._getWord()).done((result) => {
+            retry(this._getWord).done((result) => {
                 return resolve(result);
             });
         });
