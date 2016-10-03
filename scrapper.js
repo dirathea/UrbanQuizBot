@@ -24,7 +24,7 @@ class Scrapper {
     }
 
     _getWord() {
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             let quiz = [];
             osmosis.get(URBAN_DICTIONARY_RANDOM_URL)
                 .find('.def-panel')
@@ -56,7 +56,7 @@ class Scrapper {
     }
 
     findWord(word) {
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             const queryword = word.split(' ').join('+'),
                 definitionUrl = URBAN_DICTIONARY_DEFINITIONS + '?term=' + queryword;
             let meaning;
