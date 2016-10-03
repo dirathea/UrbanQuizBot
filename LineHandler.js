@@ -5,6 +5,8 @@
 
 const unirest = require('unirest');
 const EventEmitter = require('events');
+const _ = require('lodash');
+
 const GameHandler = require('./GameHandler');
 const gameHandler = new GameHandler();
 
@@ -107,15 +109,17 @@ class LineHandler extends EventEmitter {
     }
 
     handleMessage(data) {
-        for (let i = 0; i < data.events.length; i++) {
-            const event = data.events[i];
-            switch (event.type) {
-                case LINE_MESSAGE_EVENT:
-                    this.emit(LINE_MESSAGE_EVENT, event.source, event.replyToken, event.message);
-                    break;
-                default:
-                    console.log('Unhandled LINE event', event.type);
-                    break;
+        if (!_.isEmpty(data)) {
+            for (let i = 0; i < data.events.length; i++) {
+                const event = data.events[i];
+                switch (event.type) {
+                    case LINE_MESSAGE_EVENT:
+                        this.emit(LINE_MESSAGE_EVENT, event.source, event.replyToken, event.message);
+                        break;
+                    default:
+                        console.log('Unhandled LINE event', event.type);
+                        break;
+                }
             }
         }
     }
