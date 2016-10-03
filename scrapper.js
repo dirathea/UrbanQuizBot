@@ -1,5 +1,6 @@
 'use strict';
 const Promise = require("bluebird");
+const retry = require('bluebird-retry');
 const url = require('url');
 const _ = require('lodash');
 
@@ -15,6 +16,12 @@ class Scrapper {
     }
 
     getWord() {
+        return retry(this._getWord()).done((result) => {
+            return Promise.resolve(result);
+        });
+    }
+
+    _getWord() {
         return new Promise(function (resolve, reject) {
             let quiz = [];
             osmosis.get(URBAN_DICTIONARY_RANDOM_URL)
@@ -30,10 +37,15 @@ class Scrapper {
                 })
                 .done(function () {
                     console.log('total of clue', quiz.length);
-                    resolve(quiz.slice(0, 3).map((clue) => {
-                        clue.meaning = clue.meaning.replace(new RegExp(clue.word, 'g'), '_____');
-                        return clue;
-                    }));
+
+                    if (quiz.length > 0) {
+                        resolve(quiz.slice(0, 3).map((clue) => {
+                            clue.meaning = clue.meaning.replace(new RegExp(clue.word, 'g'), '_____');
+                            return clue;
+                        }));
+                    } else {
+                        reject('Failed to get clue');
+                    }
                 })
                 .log(console.log)
                 .error(console.log)
