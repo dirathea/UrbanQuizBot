@@ -11,6 +11,8 @@ const GameHandler = require('./GameHandler');
 const gameHandler = new GameHandler();
 
 const LINE_MESSAGE_EVENT = 'message';
+const LINE_POSTBACK_EVENT = 'postback';
+
 const LINE_REPLY_ENDPOINT = 'https://api.line.me/v2/bot/message/reply';
 const LINE_PUSH_ENDPOINT = 'https://api.line.me/v2/bot/message/push';
 
@@ -32,16 +34,44 @@ class LineHandler extends EventEmitter {
 
     initEventHandler() {
         this.on(LINE_MESSAGE_EVENT, this.messageEventHandler);
+        this.on(LINE_POSTBACK_EVENT, this.postbackEventHandler);
+    }
+
+    postbackEventHandler(source, replyToken, data) {
+        gameHandler.startGame(this._getUserId(source), data, (rightAnswer) => {
+            this.sendPushTextMessage(this._getUserId(source), `Sorry, you're running out of time. The right answer is ${rightAnswer}.`);
+        }).then((quiz) => {
+            this.sendReplyMessage(replyToken, `${quizStatement}\n${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
+        });
+    }
+
+    askForLanguage(to) {
+        this.sendPushMessage(to, {
+            type: 'template',
+            altText: 'Sorry, your LINE versions is not supported. Please update to continue',
+            template: {
+                type: 'confirm',
+                text: 'Choose your language',
+                actions: [
+                    {
+                        type: 'postback',
+                        label: 'Indonesia',
+                        data: 'id'
+                    },
+                    {
+                        type: 'postback',
+                        label: 'English',
+                        data: 'en',
+                    },
+                ],
+            },
+        })
     }
 
     messageEventHandler(source, replyToken, content) {
         switch (content.text.toLowerCase()) {
             case LINE_START_GAME_COMMAND:
-                gameHandler.startGame(this._getUserId(source), (rightAnswer) => {
-                    this.sendPushMessage(this._getUserId(source), `Sorry, you're running out of time. The right answer is ${rightAnswer}.`);
-                }).then((quiz) => {
-                    this.sendReplyMessage(replyToken, `${quizStatement}\n${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
-                });
+                this.askForLanguage(this._getUserId(source));
                 break;
             case LINE_GET_NEW_CLUE_COMMAND:
                 gameHandler.requestNewClue(this._getUserId(source)).then((quiz) => {
@@ -60,7 +90,14 @@ class LineHandler extends EventEmitter {
         }
     }
 
-    sendPushMessage(to, text) {
+    sendPushTextMessage(to, text) {
+        this.sendPushMessage(to, {
+            type: 'text',
+            text
+        });
+    }
+
+    sendPushMessage(to, message) {
         unirest.post(LINE_PUSH_ENDPOINT)
             .headers({
                 'Content-type': 'application/json',
@@ -68,10 +105,8 @@ class LineHandler extends EventEmitter {
             })
             .send({
                 to,
-                messages: [{
-                    type: 'text',
-                    text
-                }
+                messages: [
+                    message
                 ]
             })
             .end(() => {
@@ -118,6 +153,9 @@ class LineHandler extends EventEmitter {
                         if (event.message.type === 'text') {
                             this.emit(LINE_MESSAGE_EVENT, event.source, event.replyToken, event.message);
                         }
+                        break;
+                    case LINE_POSTBACK_EVENT:
+                        this.emit(LINE_POSTBACK_EVENT, event.source, event.replyToken, event.postback.data);
                         break;
                     default:
                         console.log('Unhandled LINE event', event.type);

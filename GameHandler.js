@@ -13,13 +13,16 @@ const inaScrapper = new IndonesianScrapper();
 const TIMEOUT_IN_SECOND = 30;
 const TIMEOUT_DURATION = TIMEOUT_IN_SECOND * 1000;
 
+const INDONESIA_GAME_LANGUAGE = 'id';
+const ENGLISH_GAME_LANGUAGE = 'en';
+
 class GameHandler {
     constructor() {
         this.listener = [];
         this.timeout = [];
     }
 
-    startGame(playerId, timeoutAction) {
+    startGame(playerId, language, timeoutAction) {
         return new Promise((resolve, reject) => {
             if (this.listener[playerId]) {
                 // Game Already running
@@ -28,7 +31,13 @@ class GameHandler {
                     message: `Game for ${playerId} is already running`,
                 });
             } else {
-                scrapper.getWord().then((result) => {
+                let gameScrapper;
+                if (language === INDONESIA_GAME_LANGUAGE) {
+                    gameScrapper = inaScrapper;
+                } else if (language === ENGLISH_GAME_LANGUAGE) {
+                    gameScrapper = scrapper;
+                }
+                gameScrapper.getWord().then((result) => {
                     this.listener[playerId] = {
                         index: 0,
                         clues: result
