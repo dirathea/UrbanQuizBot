@@ -39,15 +39,13 @@ class FacebookHandler extends EventEmitter {
             } else if (event.postback) {
                 //    Handle all postback actions
                 const payload = event.postback.payload;
-                this.emit(payload, sender);
+                this.emit('postback', sender, payload);
             }
         }
         res.sendStatus(200)
     }
 
-
-    sendTextMessage(sender, text) {
-        let messageData = {text: text};
+    sendMessage(sender, messageData) {
         unirest.post(`${BASE_FACEBOOK_ENDPOINT}/messages`)
             .query({
                 access_token: this.config.token
@@ -65,6 +63,36 @@ class FacebookHandler extends EventEmitter {
             });
     }
 
+    askForLanguage(sender) {
+        const messageData = {
+            attachment: {
+                type: 'template',
+                payload: {
+                    template_type: 'button',
+                    text: 'Choose the language',
+                    buttons: [
+                        {
+                            type: 'postback',
+                            title: 'Indonesia',
+                            payload: 'id',
+                        },
+                        {
+                            type: 'postback',
+                            title: 'English',
+                            payload: 'en',
+                        },
+                    ],
+                },
+            },
+        };
+        this.sendMessage(sender, messageData);
+    }
+
+    sendTextMessage(sender, text) {
+        let messageData = {text: text};
+        this.sendMessage(sender, messageData);
+    }
+
     initializeThreadSettings() {
         this.setGreetingText(`Hi {{user_full_name}}! Let's play Urban Quiz!`);
         this.setMenuButton();
@@ -73,11 +101,7 @@ class FacebookHandler extends EventEmitter {
 
     setEventHandler() {
         this.on('startgame', (sender) => {
-            gameHandler.startGame(sender, (rightAnswer) => {
-                this.sendTextMessage(sender, `Sorry, you're running out of time. The right answer is ${rightAnswer}.`);
-            }).then((quiz) => {
-                this.sendTextMessage(sender, `${quizStatement}\n${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
-            });
+            this.askForLanguage(sender);
         });
 
         this.on('getnewclue', (sender) => {
@@ -95,6 +119,14 @@ class FacebookHandler extends EventEmitter {
 
             });
         });
+
+        this.on('postback', (sender, data) => {
+            gameHandler.startGame(sender, data, (rightAnswer) => {
+                this.sendTextMessage(sender, `Sorry, you're running out of time. The right answer is ${rightAnswer}.`);
+            }).then((quiz) => {
+                this.sendTextMessage(sender, `${quizStatement}\n${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
+            });
+        })
     }
 
     setGreetingText(message) {
