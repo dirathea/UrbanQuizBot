@@ -38,6 +38,7 @@ class FacebookHandler extends EventEmitter {
                 }
             } else if (event.postback) {
                 //    Handle all postback actions
+                console.log('POSTBACK_EVENT', event.postback);
                 const payload = event.postback.payload;
                 this.emit('postback', sender, payload);
             }
