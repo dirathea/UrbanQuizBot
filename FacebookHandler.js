@@ -5,11 +5,14 @@
 
 const unirest = require('unirest');
 const EventEmitter = require('events');
+const _ = require('lodash');
 const GameHandler = require('./GameHandler');
 const gameHandler = new GameHandler();
 
 const quizStatement = "Guess the word by the following definition:";
 const BASE_FACEBOOK_ENDPOINT = "https://graph.facebook.com/v2.6/me";
+
+const LANGUAGES = ['id', 'en'];
 
 class FacebookHandler extends EventEmitter {
     constructor(_config) {
@@ -122,11 +125,15 @@ class FacebookHandler extends EventEmitter {
         });
 
         this.on('postback', (sender, data) => {
-            gameHandler.startGame(sender, data, (rightAnswer) => {
-                this.sendTextMessage(sender, `Sorry, you're running out of time. The right answer is ${rightAnswer}.`);
-            }).then((quiz) => {
-                this.sendTextMessage(sender, `${quizStatement}\n${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
-            });
+            if (LANGUAGES.indexOf(data) > -1) {
+                gameHandler.startGame(sender, data, (rightAnswer) => {
+                    this.sendTextMessage(sender, `Sorry, you're running out of time. The right answer is ${rightAnswer}.`);
+                }).then((quiz) => {
+                    this.sendTextMessage(sender, `${quizStatement}\n${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
+                });
+            } else {
+                this.emit('startgame', sender);
+            }
         })
     }
 
