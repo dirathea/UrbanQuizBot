@@ -32,8 +32,12 @@ const facebookHandler = new FacebookHandler({
 
 const lineHandler = new LineHandler(process.env.LINE_CHANNEL_TOKEN);
 
+bot.onText(/\/startgameindonesia/, function responseStartMessage(message) {
+    handler.startGameProcessor(message, 'id');
+});
+
 bot.onText(/\/startgame/, function responseStartMessage(message) {
-    handler.startGameProcessor(message);
+    handler.startGameProcessor(message, 'en');
 });
 
 bot.onText(/\/getnewclue/, function responseStartMessage(message) {
