@@ -26,8 +26,8 @@ class Handler {
     startGameProcessor(message, language) {
         chatBottleHandler.incomingMessageProcessor(message);
         botan.track(message, 'start');
-        return gameHandler.startGame(message.chat.id, (answer) => {
-            this._quizTimeout(message.chat.id, language, answer);
+        return gameHandler.startGame(message.chat.id, language, (answer) => {
+            this._quizTimeout(message.chat.id, answer);
         }).then((result) => {
             const firstClue = `${quizStatement}\n${result.hidden}\n(${result.index}/${result.total})\n${result.clue}`;
             this._sendMessage(message.chat.id, firstClue);
