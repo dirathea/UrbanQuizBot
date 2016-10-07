@@ -44,7 +44,9 @@ class Handler {
                     chatBottleHandler.outgoingMessageProcessor(msg.message_id, correctAnswer, message.chat.id);
                 });
             }).catch((err) => {
-
+                if (err.code === 1) {
+                    this._sendMessage(message.chat.id, `Hi There! Welcome to Urban Quiz! To begin, please write /startgame to play in English language, or /startgameindonesia to play in Indonesian language`);
+                }
             });
         }
     }

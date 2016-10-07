@@ -120,7 +120,9 @@ class FacebookHandler extends EventEmitter {
             gameHandler.answerQuiz(sender, text).then((answer) => {
                 this.sendTextMessage(sender, `Great! The right answer is : ${answer}`);
             }).catch((err) => {
-
+                if (err.code == 1) {
+                    this.sendTextMessage(sender, `Hi There! Welcome to Urban Quiz! To begin, please type start game, or click start game on the button on your left bottom.`);
+                }
             });
         });
 
