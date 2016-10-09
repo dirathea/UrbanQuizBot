@@ -85,7 +85,7 @@ class LineHandler extends EventEmitter {
                     this.sendReplyMessage(replyToken, `Great! The right answer is : ${answer}`);
                 }).catch((err) => {
                     if(err.code == 1) {
-                        this.sendReplyMessage(replyToken, `Hi There! Welcome to Urban Quiz. To start playing the game, please type start game and pick your language...`);
+                        this.sendReplyMessage(replyToken, `Hi There! Welcome to Urban Quiz. To start playing the game, please type 'start game' and pick your language...`);
                     }
                 });
                 break;
