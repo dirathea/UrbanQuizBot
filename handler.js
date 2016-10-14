@@ -45,7 +45,7 @@ class Handler {
                 });
             }).catch((err) => {
                 if (err.code === 1) {
-                    this._sendMessage(message.chat.id, `Hi There! Welcome to Urban Quiz! To begin, please write /startgame to play in English language, or /startgameindonesia to play in Indonesian language`);
+                    this._sendMessage(message.chat.id, `Hi There! Welcome to Urban Quiz! To begin, please write /startgameenglish to play in English language, or /startgameindonesia to play in Indonesian language`);
                 }
             });
         }
