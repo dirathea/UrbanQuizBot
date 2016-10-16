@@ -41,7 +41,7 @@ class LineHandler extends EventEmitter {
         gameHandler.startGame(this._getUserId(source), data, (rightAnswer) => {
             this.sendPushTextMessage(this._getUserId(source), `Sorry, you're running out of time. The right answer is ${rightAnswer}.`);
         }).then((quiz) => {
-            this.sendReplyMessage(replyToken, `${quizStatement}\n${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
+            this.sendReplyMessage(replyToken, `${quizStatement}\n${quiz.word.length} letters : ${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
         });
     }
 
@@ -75,7 +75,7 @@ class LineHandler extends EventEmitter {
                 break;
             case LINE_GET_NEW_CLUE_COMMAND:
                 gameHandler.requestNewClue(this._getUserId(source)).then((quiz) => {
-                    this.sendReplyMessage(replyToken, `${quizStatement}\n${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
+                    this.sendReplyMessage(replyToken, `${quizStatement}\n${quiz.word.length} letters : ${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
                 }).catch((err) => {
                     console.log('NEW_CLUE_LOG', err);
                 });

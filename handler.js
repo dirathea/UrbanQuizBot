@@ -29,7 +29,7 @@ class Handler {
         return gameHandler.startGame(message.chat.id, language, (answer) => {
             this._quizTimeout(message.chat.id, answer);
         }).then((result) => {
-            const firstClue = `${quizStatement}\n${result.hidden}\n(${result.index}/${result.total})\n${result.clue}`;
+            const firstClue = `${quizStatement}\n${result.word.length} letters : ${result.hidden}\n(${result.index}/${result.total})\n${result.clue}`;
             this._sendMessage(message.chat.id, firstClue);
         }).catch((error) => {
             console.log(error);
@@ -55,7 +55,7 @@ class Handler {
         chatBottleHandler.incomingMessageProcessor(message);
         botan.track(message, 'newclue');
         gameHandler.requestNewClue(message.chat.id).then((quiz) => {
-            const newClue = `${quizStatement}\n${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`;
+            const newClue = `${quizStatement}\n${result.word.length} letters : ${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`;
             this._sendMessage(message.chat.id, newClue);
         });
     }

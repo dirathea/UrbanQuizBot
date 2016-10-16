@@ -110,7 +110,7 @@ class FacebookHandler extends EventEmitter {
 
         this.on('getnewclue', (sender) => {
             gameHandler.requestNewClue(sender).then((quiz) => {
-                this.sendTextMessage(sender, `${quizStatement}\n${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
+                this.sendTextMessage(sender, `${quizStatement}\n${quiz.word.length} letters : ${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
             }).catch((err) => {
                 console.log('NEW_CLUE_LOG', err);
             });
@@ -131,7 +131,7 @@ class FacebookHandler extends EventEmitter {
                 gameHandler.startGame(sender, data, (rightAnswer) => {
                     this.sendTextMessage(sender, `Sorry, you're running out of time. The right answer is ${rightAnswer}.`);
                 }).then((quiz) => {
-                    this.sendTextMessage(sender, `${quizStatement}\n${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
+                    this.sendTextMessage(sender, `${quizStatement}\n${quiz.word.length} letters : ${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
                 });
             } else {
                 this.emit('startgame', sender);
