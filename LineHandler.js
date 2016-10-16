@@ -84,7 +84,7 @@ class LineHandler extends EventEmitter {
                 gameHandler.answerQuiz(this._getUserId(source), content.text).then((answer) => {
                     this.sendReplyMessage(replyToken, `Great! The right answer is : ${answer}`);
                 }).catch((err) => {
-                    if(err.code == 1) {
+                    if (err.code == 1 && source.type === LINE_SOURCE_TYPE_USER) {
                         this.sendReplyMessage(replyToken, `Hi There! Welcome to Urban Quiz. To start playing the game, please type 'start game' and pick your language...`);
                     }
                 });
