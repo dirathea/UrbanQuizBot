@@ -55,7 +55,7 @@ class Handler {
         chatBottleHandler.incomingMessageProcessor(message);
         botan.track(message, 'newclue');
         gameHandler.requestNewClue(message.chat.id).then((quiz) => {
-            const newClue = `${quizStatement}\n${result.word.length} letters : ${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`;
+            const newClue = `${quizStatement}\n${quiz.word.length} letters : ${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`;
             this._sendMessage(message.chat.id, newClue);
         });
     }
