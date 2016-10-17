@@ -134,7 +134,7 @@ class FacebookHandler extends EventEmitter {
                     this.sendTextMessage(sender, `${quizStatement}\n${quiz.word.length} letters : ${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`);
                 });
             } else {
-                this.emit('startgame', sender);
+                this.emit(data, sender);
             }
         })
     }
