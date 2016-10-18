@@ -6,8 +6,11 @@
 const unirest = require('unirest');
 const EventEmitter = require('events');
 const _ = require('lodash');
+const ChatBottle = require('./ChatBottleHandler');
 const GameHandler = require('./GameHandler');
 const gameHandler = new GameHandler();
+const chatBottleHandler = new ChatBottle();
+
 
 const quizStatement = "Guess the word by the following definition:";
 const BASE_FACEBOOK_ENDPOINT = "https://graph.facebook.com/v2.6/me";
@@ -26,6 +29,16 @@ class FacebookHandler extends EventEmitter {
         for (let i = 0; i < messaging_events.length; i++) {
             const event = req.body.entry[0].messaging[i];
             const sender = event.sender.id;
+
+            const message = {
+                chat: {
+                    id: sender,
+                },
+                text: event.message.text,
+                message_id: event.id,
+            };
+            chatBottleHandler.incomingMessageProcessor(message);
+
             if (event.message && event.message.text) {
                 const text = event.message.text;
                 switch (text.toLowerCase()) {
@@ -64,6 +77,12 @@ class FacebookHandler extends EventEmitter {
             .end((response) => {
                 console.log('FACEBOOK_TEXT_MESSAGE', `Sent Status ${response.code}`);
                 console.log('FACEBOOK_TEXT_MESSAGE', response.body);
+                const sentContent = response.body;
+                if (sentContent.message) {
+                    chatBottleHandler.outgoingMessageProcessor(sentContent.message_id, sentContent.message, sender);
+                } else {
+                    chatBottleHandler.outgoingMessageProcessor(sentContent.message_id, sentContent.attachment.payload.text, sender);
+                }
             });
     }
 
