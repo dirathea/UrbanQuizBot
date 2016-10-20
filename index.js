@@ -32,16 +32,25 @@ const facebookHandler = new FacebookHandler({
 
 const lineHandler = new LineHandler(process.env.LINE_CHANNEL_TOKEN);
 
-bot.onText(/\/startgameindonesia/, function responseStartMessage(message) {
-    handler.startGameProcessor(message, 'id');
-});
+// bot.onText(/\/startgameindonesia/, function responseStartMessage(message) {
+//     handler.startGameProcessor(message, 'id');
+// });
+//
+// bot.onText(/\/startgameenglish/, function responseStartMessage(message) {
+//     handler.startGameProcessor(message, 'en');
+// });
 
-bot.onText(/\/startgameenglish/, function responseStartMessage(message) {
-    handler.startGameProcessor(message, 'en');
+bot.onText(/\/startgame/, function responseStartMessage(message) {
+    handler.askForLanguage(message);
 });
 
 bot.onText(/\/getnewclue/, function responseStartMessage(message) {
     handler.getClueProcessor(message);
+});
+
+bot.on('callback_query', (query) => {
+    console.log(query);
+    handler.startGameProcessor(query.message, query.data);
 });
 
 bot.on('message', function allMessage(message) {

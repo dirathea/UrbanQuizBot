@@ -23,6 +23,23 @@ class Handler {
         return this.bot.sendMessage(chatId, content, options);
     }
 
+    askForLanguage(message) {
+        this._sendMessage(message.chat.id, 'Choose your language', {
+            inline_keyboard: [
+                [
+                    {
+                        text: 'Indonesia',
+                        callback_data: 'id',
+                    },
+                    {
+                        text: 'English',
+                        callback_data: 'en',
+                    }
+                ],
+            ]
+        });
+    }
+
     startGameProcessor(message, language) {
         chatBottleHandler.incomingMessageProcessor(message);
         botan.track(message, 'start');
