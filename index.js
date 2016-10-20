@@ -42,7 +42,7 @@ bot.onText(/\/getnewclue/, function responseStartMessage(message) {
 
 bot.on('callback_query', (query) => {
     const selectedLanguage = (query.data === 'id') ? 'Indonesia' : 'English';
-    bot.answerCallbackQuery(query.id, `Starting game in ${selectedLanguage} language`, true).then(() => {
+    bot.answerCallbackQuery(query.id, `Starting game in ${selectedLanguage} language`, false).then(() => {
         handler.startGameProcessor(query.message, query.data);
     });
 });
