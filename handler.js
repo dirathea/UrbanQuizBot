@@ -25,18 +25,20 @@ class Handler {
 
     askForLanguage(message) {
         this._sendMessage(message.chat.id, 'Choose your language', {
-            inline_keyboard: [
-                [
-                    {
-                        text: 'Indonesia',
-                        callback_data: 'id',
-                    },
-                    {
-                        text: 'English',
-                        callback_data: 'en',
-                    }
-                ],
-            ]
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        {
+                            text: 'Indonesia',
+                            callback_data: 'id',
+                        },
+                        {
+                            text: 'English',
+                            callback_data: 'en',
+                        }
+                    ],
+                ]
+            },
         });
     }
 
