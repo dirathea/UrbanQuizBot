@@ -41,7 +41,10 @@ bot.onText(/\/getnewclue/, function responseStartMessage(message) {
 });
 
 bot.on('callback_query', (query) => {
-    handler.startGameProcessor(query.message, query.data);
+    const selectedLanguage = (query.data === 'id') ? 'Indonesia' : 'English';
+    bot.answerCallbackQuery(query.id, `Starting game in ${selectedLanguage} language`, true).then(() => {
+        handler.startGameProcessor(query.message, query.data);
+    });
 });
 
 bot.on('message', function allMessage(message) {
