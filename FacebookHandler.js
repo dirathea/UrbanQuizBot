@@ -26,7 +26,6 @@ class FacebookHandler extends EventEmitter {
         let messaging_events = req.body.entry[0].messaging;
         for (let i = 0; i < messaging_events.length; i++) {
             const event = req.body.entry[0].messaging[i];
-            console.log(event);
             const sender = event.sender.id;
 
             if (event.message && event.message.text) {
