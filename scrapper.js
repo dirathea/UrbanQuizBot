@@ -61,9 +61,10 @@ class Scrapper {
                 definitionUrl = `${URBAN_DICTIONARY_DEFINITIONS}?term=${queryword}`;
             const meaning = [];
             osmosis.get(definitionUrl)
+                .find('.def-panel')
                 .set({
-                    'word': '.def-panel .word',
-                    'meaning': '.def-panel .meaning'
+                    'word': '.word',
+                    'meaning': '.meaning'
                 })
                 .data(function (result) {
                     meaning.push(result);
