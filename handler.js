@@ -88,10 +88,10 @@ class Handler {
         const urbanTerms = inlineQuery.query;
         Promise.join(englishScrapper.findWord(urbanTerms), indoScrapper.findWord(urbanTerms), (english, indo) => {
             const meanings = english.concat(indo);
-            const results = meanings.map((meaning) => {
+            const results = meanings.map((meaning, index) => {
                 return {
                     type: 'article',
-                    id: `${_.now()}`,
+                    id: index,
                     title: meaning.word,
                     input_message_content: {
                         message_text: meaning.meaning
