@@ -91,7 +91,7 @@ class Handler {
             const results = meanings.map((meaning) => {
                 return {
                     type: 'article',
-                    id: _.now().toString(),
+                    id: `${_.now()}`,
                     title: meaning.word,
                     input_message_content: {
                         message_text: meaning.meaning
@@ -99,7 +99,7 @@ class Handler {
                 }
             });
             this.bot.answerInlineQuery({
-                inline_query_id: `UQ_INLINE_${_.now()}`,
+                inline_query_id: `${_.now()}`,
                 results,
             })
         });
