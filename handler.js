@@ -98,10 +98,7 @@ class Handler {
                     }
                 }
             });
-            this.bot.answerInlineQuery({
-                inline_query_id: inlineQuery.id,
-                results,
-            })
+            this.bot.answerInlineQuery(inlineQuery.id, results);
         });
     }
 
