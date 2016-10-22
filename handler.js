@@ -91,7 +91,7 @@ class Handler {
             const results = meanings.map((meaning) => {
                 return {
                     type: 'article',
-                    id: _.now(),
+                    id: _.now().toString(),
                     title: meaning.word,
                     input_message_content: {
                         message_text: meaning.meaning
