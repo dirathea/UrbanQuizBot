@@ -41,7 +41,7 @@ bot.onText(/\/getnewclue/, (message) => {
 });
 
 bot.on('inline_query', (inlineQuery) => {
-    handler.inlineQueryProcessor(inlineQuery);
+    handler.inlineQuery(inlineQuery);
 });
 
 bot.on('callback_query', (query) => {
