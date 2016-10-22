@@ -99,7 +99,7 @@ class Handler {
                 }
             });
             this.bot.answerInlineQuery({
-                inline_query_id: `${_.now()}`,
+                inline_query_id: inlineQuery.id,
                 results,
             })
         });
