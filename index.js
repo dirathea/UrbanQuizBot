@@ -32,12 +32,16 @@ const facebookHandler = new FacebookHandler({
 
 const lineHandler = new LineHandler(process.env.LINE_CHANNEL_TOKEN);
 
-bot.onText(/\/startgame/, function responseStartMessage(message) {
+bot.onText(/\/startgame/, (message) => {
     handler.askForLanguage(message);
 });
 
-bot.onText(/\/getnewclue/, function responseStartMessage(message) {
+bot.onText(/\/getnewclue/, (message) => {
     handler.getClueProcessor(message);
+});
+
+bot.on('inline_query', (inlineQuery) => {
+    handler.inlineQueryProcessor(inlineQuery);
 });
 
 bot.on('callback_query', (query) => {

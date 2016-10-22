@@ -74,6 +74,29 @@ class IndonesianScrapper {
             });
         });
     }
+
+    findWord(terms) {
+        return new Promise((resolve, reject) => {
+            const word = [];
+            osmosis.get(`${KITAB_GAUL_BASIC_ENDPOINT}/word/${encodeURI(terms)}?kw=${encodeURI(terms)}`)
+                .find('.entryDetail')
+                .set({
+                    'word': '.word a',
+                    'meaning': '.definition'
+                })
+                .data((result) => {
+                    if (!_.isEmpty(result) && !_.isEmpty(result.meaning)) {
+                        word.push(result);
+                    }
+                })
+                .done(() => {
+                    resolve(word);
+                })
+                .log(console.log)
+                .error(console.log)
+                .debug(console.log);
+        });
+    }
 }
 
 module.exports = IndonesianScrapper;

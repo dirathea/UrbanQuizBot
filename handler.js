@@ -1,6 +1,7 @@
 'use strict';
 const Promise = require("bluebird");
 const Scrapper = require('./scrapper');
+const IndoScrapper = require('./IndonesianScrapper');
 const ChatBottleHandler = require('./ChatBottleHandler');
 const GameHandler = require('./GameHandler');
 const Botan = require('botanio');
@@ -13,6 +14,9 @@ const rateUrbanQuiz = "\nRate UrbanQuizBot on : https://telegram.me/storebot?sta
 const botan = Botan(process.env.BOTAN_TOKEN);
 const chatBottleHandler = new ChatBottleHandler();
 const gameHandler = new GameHandler();
+
+const englishScrapper = new Scrapper();
+const indoScrapper = new IndoScrapper();
 
 class Handler {
     constructor(bot) {
@@ -76,6 +80,14 @@ class Handler {
         gameHandler.requestNewClue(message.chat.id).then((quiz) => {
             const newClue = `${quizStatement}\n${quiz.word.length} letters : ${quiz.hidden}\n(${quiz.index}/${quiz.total})\n${quiz.clue}`;
             this._sendMessage(message.chat.id, newClue);
+        });
+    }
+
+    inlineQuery(inlineQuery) {
+        const urbanTerms = inlineQuery.query;
+        Promise.join(englishScrapper.findWord(urbanTerms), indoScrapper.findWord(urbanTerms), (english, indo) => {
+            console.log('english terms', english);
+            console.log('indo terms', indo)
         });
     }
 

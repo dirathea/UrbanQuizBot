@@ -58,18 +58,18 @@ class Scrapper {
     findWord(word) {
         return new Promise((resolve, reject) => {
             const queryword = word.split(' ').join('+'),
-                definitionUrl = URBAN_DICTIONARY_DEFINITIONS + '?term=' + queryword;
-            let meaning;
+                definitionUrl = `${URBAN_DICTIONARY_DEFINITIONS}?term=${queryword}`;
+            const meaning = [];
             osmosis.get(definitionUrl)
                 .set({
                     'word': '.def-panel .word',
                     'meaning': '.def-panel .meaning'
                 })
                 .data(function (result) {
-                    meaning = result;
+                    meaning.push(result);
                 })
                 .done(function () {
-                    resolve(meaning)
+                    resolve(meaning);
                 })
                 .log(console.log)
                 .error(console.log)
