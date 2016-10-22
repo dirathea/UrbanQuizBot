@@ -91,7 +91,7 @@ class Handler {
             const results = meanings.map((meaning) => {
                 return {
                     type: 'article',
-                    id: `UQ_INLINE_RESULT_${_.now()}`,
+                    id: _.now(),
                     title: meaning.word,
                     input_message_content: {
                         message_text: meaning.meaning
