@@ -5,6 +5,7 @@ const IndoScrapper = require('./IndonesianScrapper');
 const ChatBottleHandler = require('./ChatBottleHandler');
 const GameHandler = require('./GameHandler');
 const Botan = require('botanio');
+const _ = require('lodash');
 
 const TIMEOUT_IN_SECOND = 30;
 const TIMEOUT_DURATION = TIMEOUT_IN_SECOND * 1000;
@@ -86,8 +87,21 @@ class Handler {
     inlineQuery(inlineQuery) {
         const urbanTerms = inlineQuery.query;
         Promise.join(englishScrapper.findWord(urbanTerms), indoScrapper.findWord(urbanTerms), (english, indo) => {
-            console.log('english terms', english);
-            console.log('indo terms', indo)
+            const meanings = english.concat(indo);
+            const results = meanings.map((meaning) => {
+                return {
+                    type: 'article',
+                    id: `UQ_INLINE_RESULT_${_.now()}`,
+                    title: meaning.word,
+                    input_message_content: {
+                        message_text: meaning.meaning
+                    }
+                }
+            });
+            this.bot.answerInlineQuery({
+                inline_query_id: `UQ_INLINE_${_.now()}`,
+                results,
+            })
         });
     }
 

@@ -67,7 +67,9 @@ class Scrapper {
                     'meaning': '.meaning'
                 })
                 .data(function (result) {
-                    meaning.push(result);
+                    if (!_.isEmpty(result)) {
+                        meaning.push(result);
+                    }
                 })
                 .done(function () {
                     resolve(meaning);
