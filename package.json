@@ -22,6 +22,7 @@
     "messenger-bot": "^2.3.0",
     "node-telegram-bot-api-latest": "^0.2.1",
     "osmosis": "^1.1.0",
+    "parse-server": "^2.2.23",
     "unirest": "^0.5.1"
   }
 }

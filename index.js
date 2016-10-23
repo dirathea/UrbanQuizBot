@@ -4,12 +4,20 @@ const WEBHOOK_URL = process.env.WEBHOOK_URL || 'localhost';
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 const bodyParser = require('body-parser');
+const ParseServer = require('parse-server').ParseServer;
+
+const parseServer = new ParseServer({
+    databaseUri: process.env.MONGODB_URI,
+    appId: process.env.PARSE_APP_ID,
+    masterKey: process.env.PARSE_MASTER_KEY,
+});
 
 const webApp = express();
 webApp.use(bodyParser.json()); // for parsing application/json
 webApp.use(bodyParser.urlencoded({
     extended: true
 }));
+webApp.use('/parse', parseServer);
 
 const token = process.env.TELEGRAM_BOT_TOKEN;
 
