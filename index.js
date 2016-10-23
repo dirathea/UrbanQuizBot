@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const ParseServer = require('parse-server').ParseServer;
 
 const parseServer = new ParseServer({
-    databaseUri: process.env.MONGODB_URI,
+    databaseURI: process.env.MONGODB_URI,
     appId: process.env.PARSE_APP_ID,
     masterKey: process.env.PARSE_MASTER_KEY,
 });
