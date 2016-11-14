@@ -86,20 +86,22 @@ class Handler {
 
     inlineQuery(inlineQuery) {
         const urbanTerms = inlineQuery.query;
-        Promise.join(englishScrapper.findWord(urbanTerms), indoScrapper.findWord(urbanTerms), (english, indo) => {
-            const meanings = english.concat(indo);
-            const results = meanings.map((meaning, index) => {
-                return {
-                    type: 'article',
-                    id: index,
-                    title: meaning.word,
-                    input_message_content: {
-                        message_text: meaning.meaning
+        if (urbanTerms.length > 0) {
+            Promise.join(englishScrapper.findWord(urbanTerms), indoScrapper.findWord(urbanTerms), (english, indo) => {
+                const meanings = english.concat(indo);
+                const results = meanings.map((meaning, index) => {
+                    return {
+                        type: 'article',
+                        id: index,
+                        title: meaning.word,
+                        input_message_content: {
+                            message_text: meaning.meaning
+                        }
                     }
-                }
+                });
+                this.bot.answerInlineQuery(inlineQuery.id, results);
             });
-            this.bot.answerInlineQuery(inlineQuery.id, results);
-        });
+        }
     }
 
     _quizTimeout(chatId, answer) {
