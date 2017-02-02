@@ -32,7 +32,7 @@ const facebookHandler = new FacebookHandler({
 
 const lineHandler = new LineHandler(process.env.LINE_CHANNEL_TOKEN);
 
-bot.onText(/\/startgame/, (message) => {
+bot.onText(/\/startgame|\/start/, (message) => {
     handler.askForLanguage(message);
 });
 
