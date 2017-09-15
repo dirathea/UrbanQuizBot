@@ -18,10 +18,10 @@
     "body-parser": "^1.15.2",
     "botanio": "0.0.6",
     "express": "^4.14.0",
-    "lodash": "^4.16.2",
+    "lodash": "^4.17.4",
     "messenger-bot": "^2.3.0",
-    "node-telegram-bot-api": "^0.26.0",
-    "osmosis": "^1.1.0",
+    "node-telegram-bot-api": "^0.27.0",
+    "osmosis": "^1.1.2",
     "parse-server": "^2.2.23",
     "unirest": "^0.5.1"
   }
